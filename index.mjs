@@ -19,10 +19,14 @@ function createConstraintSet() {
     return ConstraintSet.fromGuesses(constraints);
 }
 
+function extractFirstNElements(array, n) {
+    return array.slice(0, n);
+}
+
 document.getElementById('submit').onclick = () => {
     var constraintSet = createConstraintSet();
     var candidates = WORDS.filter(word => constraintSet.matches(word));
     var suggestion = new Responder(candidates).getGuessWithBestMostFrequestResponse();
-    alert(candidates.length + '\n' + suggestion + '\n' + candidates);
+    alert(suggestion + '\n\n' + candidates.length + '\n' + candidates.slice(0, 5).map(word => ' - ' + word).join('\n'));
 }
 
