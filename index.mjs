@@ -1,5 +1,6 @@
 import ConstraintSet from "./ConstraintSet.mjs";
 import { WORDS } from "./wordlist.mjs";
+import Responder from "./Responder.mjs";
 
 
 function createConstraintSet() {
@@ -21,6 +22,7 @@ function createConstraintSet() {
 document.getElementById('submit').onclick = () => {
     var constraintSet = createConstraintSet();
     var candidates = WORDS.filter(word => constraintSet.matches(word));
-    alert(candidates.length + '\n' + candidates);
+    var suggestion = new Responder(candidates).getGuessWithBestMostFrequestResponse();
+    alert(candidates.length + '\n' + suggestion + '\n' + candidates);
 }
 

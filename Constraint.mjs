@@ -6,7 +6,7 @@ export default class Constraint {
     }
 
     matches(word) {
-        if (this.pos) {
+        if (this.pos !== null) {
          if (this.occurs) {
              // Green match
              return this.letter === word[this.pos];

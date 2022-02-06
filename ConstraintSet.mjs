@@ -32,6 +32,5 @@ ConstraintSet.fromGuesses = function(history) {
     }
 
     var allConstraints = history.flatMap(({guess, info}) => constraintsFromGuess(guess, info));
-    
     return new ConstraintSet(allConstraints);
 }
