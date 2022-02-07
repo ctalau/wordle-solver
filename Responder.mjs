@@ -9,14 +9,21 @@ export default class Responder {
 
     respond(guess, answer) {
         var response = '';
+        var answerLetters = [... answer];
         for (var i = 0; i < guess.length; i++) {
             var letter = guess[i];
-            if (letter === answer[i]) {
+            if (letter === answerLetters[i]) {
+                // Mark letter as matched, so that it is not matched again.
+                answerLetters[i] = ' ';
                 response += 'g';
-            } else if (answer.indexOf(letter) !== -1) {
-                response += 'y';
             } else {
-                response += '_';
+                var letterPos = answerLetters.indexOf(letter);
+                if (letterPos !== -1) {
+                    answerLetters[letterPos] = ' ';
+                    response += 'y';
+                } else {
+                    response += '_';
+                }
             }
         }
         return response;
