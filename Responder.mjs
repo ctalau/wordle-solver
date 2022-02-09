@@ -8,21 +8,23 @@ export default class Responder {
     }
 
     respond(guess, answer) {
-        var response = '';
+        var response = Array(guess.length).fill('_');
+        
         var answerLetters = [... answer];
         for (var i = 0; i < guess.length; i++) {
-            var letter = guess[i];
-            if (letter === answerLetters[i]) {
-                // Mark letter as matched, so that it is not matched again.
+            if (guess[i] === answer[i]) {
+                response[i] = 'g';
                 answerLetters[i] = ' ';
-                response += 'g';
-            } else {
+            }
+        }
+
+        for (var i = 0; i < guess.length; i++) {
+            var letter = guess[i];
+            if (response[i] === '_') {
                 var letterPos = answerLetters.indexOf(letter);
                 if (letterPos !== -1) {
                     answerLetters[letterPos] = ' ';
-                    response += 'y';
-                } else {
-                    response += '_';
+                    response[i] = 'y';
                 }
             }
         }
@@ -79,3 +81,5 @@ export default class Responder {
         return {guess: bestGuess, count: bestCount};
     }
 }
+
+// console.log(new Responder(WORDS).respond('lulls', 'mulls')); // should be '_gggg'
