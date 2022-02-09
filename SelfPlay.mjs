@@ -4,6 +4,10 @@ import ConstraintSet from './ConstraintSet.mjs';
 
 export default class SelfPlay {
 
+    constructor(strategy) {
+        this.strategy = strategy;
+    }
+
     playGame(answer) {
         var history = [];
         var guess = 'aloes';
@@ -26,7 +30,7 @@ export default class SelfPlay {
                     throw new Error("Lost game - wrong answer. Got: " + candidates[0] + ", was: " + answer);
                 }
             }
-            guess = candidates[0];
+            guess = this.strategy(candidates);
             round++;
         }
     }
@@ -44,5 +48,7 @@ export default class SelfPlay {
         return average / count;
     }
 }
-
-console.log(new SelfPlay().estimateAverageGameLength(100));
+// console.log(new SelfPlay().playGame('mulls'));
+// var selfPlay = new SelfPlay(candidates => candidates[0]);
+var selfPlay = new SelfPlay(candidates => new Responder(candidates).getGuessWithBestMostFrequestResponse());
+console.log(selfPlay.estimateAverageGameLength(10));
