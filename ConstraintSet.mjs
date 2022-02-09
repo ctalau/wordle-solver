@@ -1,6 +1,6 @@
-import LetterMaxCountConstraint from "./LetterMaxCountConstraint.mjs";
-import LetterPositionConstraint from "./LetterPositionConstraint.mjs";
-import LetterMinCountConstraint from "./LetterMinCountConstraint.mjs";
+import LetterMaxCountConstraint from "./constraints/LetterMaxCountConstraint.mjs";
+import LetterPositionConstraint from "./constraints/LetterPositionConstraint.mjs";
+import LetterMinCountConstraint from "./constraints/LetterMinCountConstraint.mjs";
 
 export default class ConstraintSet {
     /**
