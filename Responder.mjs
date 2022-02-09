@@ -2,9 +2,8 @@ import { WORDS } from "./wordlist.mjs";
 
 export default class Responder {
 
-    constructor(words, hard) {
+    constructor(words) {
         this.words = words;
-        this.hard = hard;
     }
 
     respond(guess, answer) {
@@ -54,31 +53,17 @@ export default class Responder {
     }
 
     getGuessWithBestMostFrequestResponse() {
-        var guessAmongMatches = this.getGuessWithBestMostFrequestResponseAmong(this.words);
-        if (this.hard || this.words.length === WORDS.length) {
-            return guessAmongMatches.guess;
-        } else {
-            var guess = this.getGuessWithBestMostFrequestResponseAmong(WORDS);
-            if (guess.count === guessAmongMatches.count) {
-                // It has a chance to be the correct answer.
-                return guessAmongMatches.guess;
-            } else {
-                return guess.guess;
-            }
-        }
-    }
-
-    getGuessWithBestMostFrequestResponseAmong(candidates) {
         var bestGuess = '';
         var bestCount = Infinity;    
-        for (let guess of candidates) {
+        var candidatesSet = new Set(this.words);
+        for (let guess of WORDS) {
             var response = this.getMostFrequestResponse(guess);
-            if (response.count < bestCount) {
+            if (response.count < bestCount || response.count === bestCount && candidatesSet.has(guess)) {
                 bestGuess = guess;
                 bestCount = response.count;
             }
         }
-        return {guess: bestGuess, count: bestCount};
+        return bestGuess;
     }
 }
 
