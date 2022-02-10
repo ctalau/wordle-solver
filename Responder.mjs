@@ -1,4 +1,6 @@
 import { WORDS } from "./wordlist.mjs";
+import Response from "./Response.mjs";
+
 
 export default class Responder {
 
@@ -7,33 +9,36 @@ export default class Responder {
     }
 
     respond(guess, answer) {
-        var response = Array(guess.length).fill('_');
-        
-        var answerLetters = [... answer];
+        return this.getResponse_(guess, answer).toString();
+    }
+
+    getResponse_(guess, answer) {
+        var response = new Response();
+
+        var answerLetters = [answer[0], answer[1], answer[2], answer[3], answer[4]];
         for (var i = 0; i < guess.length; i++) {
             if (guess[i] === answer[i]) {
-                response[i] = 'g';
+                response.setGreen(i);
                 answerLetters[i] = ' ';
             }
         }
 
         for (var i = 0; i < guess.length; i++) {
             var letter = guess[i];
-            if (response[i] === '_') {
+            if (response.isNone(i)) {
                 var letterPos = answerLetters.indexOf(letter);
                 if (letterPos !== -1) {
                     answerLetters[letterPos] = ' ';
-                    response[i] = 'y';
+                    response.setYellow(i);
                 }
             }
         }
         return response;
     }
-
     getResponsesHistogram(guess) {
         var histogram = {};
         for (let answer of this.words) {
-            var response = this.respond(guess, answer);
+            var response = this.getResponse_(guess, answer).toKey();
             histogram[response] = (histogram[response] || 0) + 1;
         }
         return histogram;

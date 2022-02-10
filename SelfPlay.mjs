@@ -48,7 +48,4 @@ export default class SelfPlay {
         return average / count;
     }
 }
-// console.log(new SelfPlay().playGame('mulls'));
-// var selfPlay = new SelfPlay(candidates => candidates[0]);
-var selfPlay = new SelfPlay(candidates => new Responder(candidates).getGuessWithBestMostFrequestResponse());
-console.log(selfPlay.estimateAverageGameLength(10));
+
