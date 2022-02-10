@@ -1,5 +1,6 @@
 import { WORDS } from "./wordlist.mjs";
 import Response from "./Response.mjs";
+import Word from "./Word.mjs";
 
 
 export default class Responder {
@@ -9,26 +10,27 @@ export default class Responder {
     }
 
     respond(guess, answer) {
-        return this.getResponse_(guess, answer).toString();
+        var guessWord = new Word(guess);
+        return this.getResponse_(guessWord, answer).toString();
     }
 
-    getResponse_(guess, answer) {
+    getResponse_(guessWord, answer) {
         var response = new Response();
 
-        var answerLetters = [answer[0], answer[1], answer[2], answer[3], answer[4]];
-        for (var i = 0; i < guess.length; i++) {
-            if (guess[i] === answer[i]) {
+        var answerWord = new Word(answer);
+        for (var i = 0; i < answer.length; i++) {
+            if (guessWord.getLetterOrdinal(i) === answerWord.getLetterOrdinal(i)) {
                 response.setGreen(i);
-                answerLetters[i] = ' ';
+                answerWord.clearLetter(i);
             }
         }
 
-        for (var i = 0; i < guess.length; i++) {
-            var letter = guess[i];
+        for (var i = 0; i < answer.length; i++) {
+            var letter = guessWord.getLetterOrdinal(i);
             if (response.isNone(i)) {
-                var letterPos = answerLetters.indexOf(letter);
+                var letterPos = answerWord.indexOfOrdinal(letter);
                 if (letterPos !== -1) {
-                    answerLetters[letterPos] = ' ';
+                    answerWord.clearLetter(letterPos);
                     response.setYellow(i);
                 }
             }
@@ -36,9 +38,11 @@ export default class Responder {
         return response;
     }
     getResponsesHistogram(guess) {
+        var guessWord = new Word(guess);
+
         var histogram = {};
         for (let answer of this.words) {
-            var response = this.getResponse_(guess, answer).toKey();
+            var response = this.getResponse_(guessWord, answer).toKey();
             histogram[response] = (histogram[response] || 0) + 1;
         }
         return histogram;
