@@ -67,4 +67,3 @@ export default class Responder {
     }
 }
 
-// console.log(new Responder(WORDS).respond('lulls', 'mulls')); // should be '_gggg'
