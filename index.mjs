@@ -1,7 +1,7 @@
 import ConstraintSet from "./ConstraintSet.mjs";
 import { WORDS } from "./wordlist.mjs";
-import Responder from "./Responder.mjs";
 import UI from "./UI.mjs";
+import HistogramSuggester from "./HistogramSuggester.mjs";
 
 var ui = new UI();
 
@@ -12,7 +12,7 @@ document.getElementById('submit').onclick = () => {
     if (candidates.length === 0) {
         alert('No matching words.');
     } else {
-        var suggestion = new Responder(candidates).getGuessWithBestMostFrequestResponse();
+        var suggestion = new HistogramSuggester(candidates).getGuessWithBestMostFrequestResponse();
         ui.setNextGuess(suggestion);
     }
 }

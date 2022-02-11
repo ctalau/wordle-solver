@@ -26,8 +26,8 @@ export default class Responder {
         }
 
         for (var i = 0; i < answer.length; i++) {
-            var letter = guessWord.getLetterOrdinal(i);
             if (response.isNone(i)) {
+                var letter = guessWord.getLetterOrdinal(i);
                 var letterPos = answerWord.indexOfOrdinal(letter);
                 if (letterPos !== -1) {
                     answerWord.clearLetter(letterPos);
@@ -36,43 +36,6 @@ export default class Responder {
             }
         }
         return response;
-    }
-    getResponsesHistogram(guess) {
-        var guessWord = new Word(guess);
-
-        var histogram = {};
-        for (let answer of this.words) {
-            var response = this.getResponse_(guessWord, answer).toKey();
-            histogram[response] = (histogram[response] || 0) + 1;
-        }
-        return histogram;
-    }
-
-    getMostFrequestResponse(guess) {
-        var histogram = this.getResponsesHistogram(guess);
-        var max = 0;
-        var maxResponse = '';
-        for (var response in histogram) {
-            if (histogram[response] > max) {
-                max = histogram[response];
-                maxResponse = response;
-            }
-        }
-        return {response: maxResponse, count: max};
-    }
-
-    getGuessWithBestMostFrequestResponse() {
-        var bestGuess = '';
-        var bestCount = Infinity;    
-        var candidatesSet = new Set(this.words);
-        for (let guess of WORDS) {
-            var response = this.getMostFrequestResponse(guess);
-            if (response.count < bestCount || response.count === bestCount && candidatesSet.has(guess)) {
-                bestGuess = guess;
-                bestCount = response.count;
-            }
-        }
-        return bestGuess;
-    }
+    }    
 }
 
