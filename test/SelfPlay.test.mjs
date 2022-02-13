@@ -26,7 +26,7 @@ describe('SelfPlay', function() {
                 return suggester.getGuessWithBestScore()
             });
             var histo = selfPlay.playAllGames();
-            assert.deepEqual(histo, {
+            assert.deepEqual(histo.toObject(), {
                 '1': 16,
                 '2': 921,
                 '3': 2452,
@@ -54,7 +54,7 @@ describe('SelfPlay', function() {
             });
             var histo = selfPlay.playAllGames();
             console.log(histo);
-            assert.deepEqual(histo, {
+            assert.deepEqual(histo.toObject(), {
                 '1': 16,
                 '2': 682,
                 '3': 2342,

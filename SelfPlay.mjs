@@ -1,6 +1,7 @@
-import {WORDS} from './wordlist.mjs';
+import {WORDS, wordFromString} from './wordlist.mjs';
 import Responder from './Responder.mjs';
 import ConstraintSet from './ConstraintSet.mjs';
+import PlayHistogram from './PlayHistogram.mjs';
 
 // This choice is computed by runing the algoritm. But since it is expensive to compute, 
 // it is just hardcoded here.
@@ -52,35 +53,28 @@ export default class SelfPlay {
     }
 
     estimateAverageGameLength(count) {
-        var average = 0;
+        var playHistogram = new PlayHistogram();
         for (var i = 0; i < count; i++) {
             var duration = this.playRandomGame();
-            average += duration;
-            console.log(i, average / (i + 1));
+            playHistogram.add(duration);
+            console.log(`Word: ${i},\t ` + playHistogram.toString());
         }
         return average / count;
     }
 
+    /**
+     * @returns {PlayHistogram}
+     */
     playAllGames() {
-        var sum = 0;
-        var max = 0;
-        var fails = 0;
-        var histo = {};
-
+        var playHistogram = new PlayHistogram();
         for (var i = 0; i < WORDS.length; i++) {
             var duration = this.playGame(WORDS[i]);
-            sum += duration;
-            if (duration > 6) {
-                fails ++;
-            }
-            max = Math.max(max, duration)
-            histo[duration] = (histo[duration] || 0) + 1;
-
+            playHistogram.add(duration);
             if (i % 100 === 0) {
-                console.log(`Word: ${i},\t Avg: ${sum / (i + 1)},\t fails: ${fails},\t max: ${max}`);
+                console.log(`Word: ${i},\t ` + playHistogram.toString());
             }
         }
-        return histo;
+        return playHistogram;
     }
     
 }

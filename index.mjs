@@ -4,6 +4,7 @@ import UI from "./UI.mjs";
 import HistogramSuggester from "./HistogramSuggester.mjs";
 import Response from "./Response.mjs";
 import MaxScorer from "./scorers/MaxScorer.mjs";
+import ExpectedValueScorer from "./scorers/ExpectedValueScorer.mjs";
 
 var ui = new UI();
 
@@ -19,7 +20,7 @@ ui.onResponseAvailable(() => {
     } else if (candidates.length === 1) {
         alert('Found answer: ' + candidates[0]);
     } else {
-        var scorer = new MaxScorer();
+        var scorer = new ExpectedValueScorer();
         var suggestion = new HistogramSuggester(candidates, scorer).getGuessWithBestScore();
         ui.setNextGuess(suggestion);
     }
