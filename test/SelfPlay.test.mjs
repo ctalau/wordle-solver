@@ -16,6 +16,6 @@ describe('SelfPlay', function() {
     }); 
     it('plays all games', () => {
         var selfPlay = new SelfPlay(candidates => new HistogramSuggester(candidates).getGuessWithBestMostFrequestResponse());
-        console.log(selfPlay.playAllGames());
+        // console.log(selfPlay.playAllGames());
     });
 });

@@ -17,28 +17,26 @@ export default class HistogramSuggester {
     /**
      * @param {Word} guess The guess for which to get the most frequent response. 
      */
-    getMostFrequestResponse(guess) {
+    getScore(guess) {
         var histogram = this.histogramComputer_.getResponsesHistogram(guess);
         var max = 0;
-        var maxResponse = '';
         for (var response in histogram) {
             if (histogram[response] > max) {
                 max = histogram[response];
-                maxResponse = response;
             }
         }
-        return {response: maxResponse, count: max};
+        return max;
     }
 
     getGuessWithBestMostFrequestResponse() {
         var bestGuess = '';
-        var bestCount = Infinity;    
+        var bestScore = Infinity;    
         var candidatesSet = new Set(this.words);
         for (let guess of WORDS) {
-            var response = this.getMostFrequestResponse(guess);
-            if (response.count < bestCount || response.count === bestCount && candidatesSet.has(guess)) {
+            var score = this.getScore(guess);
+            if (score < bestScore || score === bestScore && candidatesSet.has(guess)) {
                 bestGuess = guess;
-                bestCount = response.count;
+                bestScore = score;
             }
         }
         return bestGuess;
