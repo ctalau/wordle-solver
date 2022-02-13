@@ -36,4 +36,7 @@ export default class UI {
         return constraints;
     }
     
+    onResponseAvailable(callback) {
+        document.getElementById('submit').onclick = callback;
+    }
 }

@@ -7,7 +7,7 @@ import MaxScorer from "./scorers/MaxScorer.mjs";
 
 var ui = new UI();
 
-document.getElementById('submit').onclick = () => {
+ui.onResponseAvailable(() => {
     var constraints = ui.getConstraints().map(({guess, info}) => {
         return {guess: wordFromString(guess), info: Response.fromString(info)};
     });
@@ -16,10 +16,12 @@ document.getElementById('submit').onclick = () => {
     var candidates = WORDS.filter(word => constraintSet.matches(word));
     if (candidates.length === 0) {
         alert('No matching words.');
+    } else if (candidates.length === 1) {
+        alert('Found answer: ' + candidates[0]);
     } else {
         var scorer = new MaxScorer();
         var suggestion = new HistogramSuggester(candidates, scorer).getGuessWithBestScore();
         ui.setNextGuess(suggestion);
     }
-}
+});
 
