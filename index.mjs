@@ -16,7 +16,7 @@ document.getElementById('submit').onclick = () => {
     if (candidates.length === 0) {
         alert('No matching words.');
     } else {
-        var suggestion = new HistogramSuggester(candidates).getGuessWithBestMostFrequestResponse();
+        var suggestion = new HistogramSuggester(candidates).getGuessWithBestScore();
         ui.setNextGuess(suggestion);
     }
 }

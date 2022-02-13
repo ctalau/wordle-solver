@@ -28,7 +28,7 @@ export default class HistogramSuggester {
         return max;
     }
 
-    getGuessWithBestMostFrequestResponse() {
+    getGuessWithBestScore() {
         var bestGuess = '';
         var bestScore = Infinity;    
         var candidatesSet = new Set(this.words);
