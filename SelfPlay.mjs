@@ -1,11 +1,10 @@
-import {wordFromString, WORDS} from './wordlist.mjs';
+import {WORDS} from './wordlist.mjs';
 import Responder from './Responder.mjs';
 import ConstraintSet from './ConstraintSet.mjs';
 
 // This choice is computed by runing the algoritm. But since it is expensive to compute, 
 // it is just hardcoded here.
-// TODO: cache it.
-const firstGuessString = 'aloes';
+var firstGuess = wordFromString('aloes');
 
 export default class SelfPlay {
 
@@ -13,11 +12,18 @@ export default class SelfPlay {
         this.strategy = strategy;
     }
 
+    getFirstGuess() {
+        if (!firstGuess) {
+            firstGuess = this.strategy(WORDS);
+        }
+        return firstGuess;
+    }
+
     playGame(answer) {
         var history = [];
 
         var candidates = WORDS;
-        var guess = wordFromString(firstGuessString);
+        var guess = this.getFirstGuess();
         var round = 1;
 
         while (true) {
@@ -56,20 +62,25 @@ export default class SelfPlay {
     }
 
     playAllGames() {
-        var average = 0;
+        var sum = 0;
         var max = 0;
         var fails = 0;
+        var histo = {};
+
         for (var i = 0; i < WORDS.length; i++) {
             var duration = this.playGame(WORDS[i]);
-            average += duration;
+            sum += duration;
             if (duration > 6) {
                 fails ++;
-                console.log("!!! Game " + WORDS[i] + " took " + duration + " moves.");
             }
             max = Math.max(max, duration)
-            console.log(i, average / (i + 1), 'fails: ' + fails, 'max:' + max);
+            histo[duration] = (histo[duration] || 0) + 1;
+
+            if (i % 100 === 0) {
+                console.log(`Word: ${i},\t Avg: ${sum / (i + 1)},\t fails: ${fails},\t max: ${max}`);
+            }
         }
-        return average / WORDS.length;
+        return histo;
     }
     
 }

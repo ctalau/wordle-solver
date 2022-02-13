@@ -3,6 +3,7 @@ import { WORDS, wordFromString } from "./wordlist.mjs";
 import UI from "./UI.mjs";
 import HistogramSuggester from "./HistogramSuggester.mjs";
 import Response from "./Response.mjs";
+import MaxScorer from "./scorers/MaxScorer.mjs";
 
 var ui = new UI();
 
@@ -16,7 +17,8 @@ document.getElementById('submit').onclick = () => {
     if (candidates.length === 0) {
         alert('No matching words.');
     } else {
-        var suggestion = new HistogramSuggester(candidates).getGuessWithBestScore();
+        var scorer = new MaxScorer();
+        var suggestion = new HistogramSuggester(candidates, scorer).getGuessWithBestScore();
         ui.setNextGuess(suggestion);
     }
 }

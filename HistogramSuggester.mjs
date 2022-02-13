@@ -8,10 +8,17 @@ export default class HistogramSuggester {
     /**
      * 
      * @param {Array<Word>} words The array of candidates from which to derive a suggestion. 
+     * @param {{getScore: function(Object<number, number>): number}} scorer The scorer to use to score the candidates.
      */
-    constructor(words) {
+    constructor(words, scorer) {
         this.words = words;
         this.histogramComputer_ = new HistogramComputer(words);
+        this.scorer = scorer;
+        this.hardMode = false;
+    }
+
+    setHardMode(hardMode) {
+        this.hardMode = hardMode;
     }
 
     /**
@@ -19,22 +26,17 @@ export default class HistogramSuggester {
      */
     getScore(guess) {
         var histogram = this.histogramComputer_.getResponsesHistogram(guess);
-        var max = 0;
-        for (var response in histogram) {
-            if (histogram[response] > max) {
-                max = histogram[response];
-            }
-        }
-        return max;
+        return this.scorer.getScore(histogram)
     }
 
     getGuessWithBestScore() {
         var bestGuess = '';
         var bestScore = Infinity;    
-        var candidatesSet = new Set(this.words);
-        for (let guess of WORDS) {
+        var possibleAnswers = new Set(this.words);
+        var candidates = this.hardMode ? this.words : WORDS;
+        for (let guess of candidates) {
             var score = this.getScore(guess);
-            if (score < bestScore || score === bestScore && candidatesSet.has(guess)) {
+            if (score < bestScore || score === bestScore && possibleAnswers.has(guess)) {
                 bestGuess = guess;
                 bestScore = score;
             }
