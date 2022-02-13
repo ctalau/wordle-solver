@@ -1,14 +1,8 @@
-import { WORDS } from "./wordlist.mjs";
 import Response from "./Response.mjs";
 import Word from "./Word.mjs";
 
 
 export default class Responder {
-
-    constructor(words) {
-        this.words = words;
-    }
-
     respond(guess, answer) {
         var guessWord = new Word(guess);
         return this.getResponse_(guessWord, answer).toString();
