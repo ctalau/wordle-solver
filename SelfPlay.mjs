@@ -47,5 +47,21 @@ export default class SelfPlay {
         }
         return average / count;
     }
+
+    playAllGames() {
+        var average = 0;
+        var max = 0;
+        for (var i = 0; i < WORDS.length; i++) {
+            var duration = this.playGame(WORDS[i]);
+            average += duration;
+            if (duration > 6) {
+                console.log("!!! Game " + WORDS[i] + " took " + duration + " moves.");
+            }
+            max = Math.max(max, duration)
+            console.log(i, average / (i + 1), max);
+        }
+        return average / WORDS.length;
+    }
+    
 }
 
