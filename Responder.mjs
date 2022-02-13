@@ -1,30 +1,34 @@
 import Response from "./Response.mjs";
 import Word from "./Word.mjs";
 
-
 export default class Responder {
-    respond(guess, answer) {
-        var guessWord = new Word(guess);
+    respond(guessWord, answer) {
         return this.getResponse_(guessWord, answer).toString();
     }
 
+    /**
+     * @param {Word} guessWord The guess for which to get the response.
+     * @param {Word} answer The answer for which to get a response.
+     * 
+     * @returns {Response} The response.
+     */
     getResponse_(guessWord, answer) {
         var response = new Response();
+        answer = answer.clone();
 
-        var answerWord = new Word(answer);
-        for (var i = 0; i < answer.length; i++) {
-            if (guessWord.getLetterOrdinal(i) === answerWord.getLetterOrdinal(i)) {
+        for (var i = 0; i < guessWord.length; i++) {
+            if (guessWord.getLetterOrdinal(i) === answer.getLetterOrdinal(i)) {
                 response.setGreen(i);
-                answerWord.clearLetter(i);
+                answer.clearLetter(i);
             }
         }
 
-        for (var i = 0; i < answer.length; i++) {
+        for (var i = 0; i < guessWord.length; i++) {
             if (response.isNone(i)) {
                 var letter = guessWord.getLetterOrdinal(i);
-                var letterPos = answerWord.indexOfOrdinal(letter);
+                var letterPos = answer.indexOfOrdinal(letter);
                 if (letterPos !== -1) {
-                    answerWord.clearLetter(letterPos);
+                    answer.clearLetter(letterPos);
                     response.setYellow(i);
                 }
             }

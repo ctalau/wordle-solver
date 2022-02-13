@@ -10,13 +10,18 @@ function letterCode(l) {
 
 export default class Word {
 
-    constructor(word) {
+    constructor(index) {
+        this.index = index;
+    }
+
+    setLetters(word) {
         this.bits = 0;
         var shift = 0;
         for (var i = 0; i < lettersCount; i++) {
             this.bits |= letterCode(word[i]) << shift;
             shift += bitsPerLetter;
         }
+        return this;
     }
 
     getLetterOrdinal(i) {
@@ -47,5 +52,27 @@ export default class Word {
             temp >>= bitsPerLetter;
         }
         return -1;
+    }
+
+    getIndex() {
+        return this.index;
+    }
+
+    equals(otherWord) {
+        return this.index === otherWord.index;
+    }
+
+    toString() {
+        return this.getLetter(0) + this.getLetter(1) + this.getLetter(2) + this.getLetter(3) + this.getLetter(4);
+    }
+
+    get length() {
+        return 5;
+    }
+
+    clone() {
+        var word = new Word(this.index);
+        word.bits = this.bits;
+        return word;
     }
 }

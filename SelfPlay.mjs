@@ -1,6 +1,11 @@
-import {WORDS} from './wordlist.mjs';
+import {wordFromString, WORDS} from './wordlist.mjs';
 import Responder from './Responder.mjs';
 import ConstraintSet from './ConstraintSet.mjs';
+
+// This choice is computed by runing the algoritm. But since it is expensive to compute, 
+// it is just hardcoded here.
+// TODO: cache it.
+const firstGuessString = 'aloes';
 
 export default class SelfPlay {
 
@@ -10,12 +15,13 @@ export default class SelfPlay {
 
     playGame(answer) {
         var history = [];
-        var guess = 'aloes';
+
         var candidates = WORDS;
+        var guess = wordFromString(firstGuessString);
         var round = 1;
 
         while (true) {
-            var response = new Responder(candidates).respond(guess, answer);
+            var response = new Responder().getResponse_(guess, answer);
             history.push({guess, info: response});
             var constraintSet = ConstraintSet.fromGuesses(history);
             
@@ -24,7 +30,7 @@ export default class SelfPlay {
             if (candidates.length === 0) {
                 throw new Error("Lost game - no answer found. Was: " + answer);
             } else if (candidates.length === 1) {
-                if (candidates[0] === answer) {
+                if (candidates[0].equals(answer)) {
                     return round;
                 } else {
                     throw new Error("Lost game - wrong answer. Got: " + candidates[0] + ", was: " + answer);

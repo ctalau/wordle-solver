@@ -1,3 +1,5 @@
+import Word from "../Word.mjs";
+
 export default class LetterMaxCountConstraint {
     /**
      * 
@@ -9,10 +11,14 @@ export default class LetterMaxCountConstraint {
         this.count = count;
     }
 
+    /**
+     * @param {Word} word 
+     * @returns {boolean} True if the word matches the constraint.
+     */
     matches(word) {
         var count = 0;
         for (var i = 0; i < word.length; i++) {
-            if (word[i] === this.letter) {
+            if (word.getLetter(i) === this.letter) {
                 count++;
             }
         }

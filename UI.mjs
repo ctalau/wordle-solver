@@ -14,6 +14,9 @@ export default class UI {
         return document.getElementById("info-" + index).value;
     }
 
+    /**
+     * @returns {Array<{guess: string, info: string}>} The history of the game.
+     */
     getConstraints() {
         var constraints = [];
         for (var i = 1; i <= 6; i++) {

@@ -17,12 +17,23 @@ export default class Response {
         this.response |= YELLOW << shift;
     }
 
-    isNone(i) {
+    getSlot(i) {
         var shift = i * 4;
-        var slot = (this.response >> shift) & 0xf;
-        return slot === NONE;
+        return (this.response >> shift) & 0xf;
     }
-    
+
+    isNone(i) {
+        return this.getSlot(i) === NONE;
+    }
+
+    isGreen(i) {
+        return this.getSlot(i) === GREEN;
+    }
+
+    isYellow(i) {
+        return this.getSlot(i) === YELLOW;
+    }
+
     toString() {
         var mapping = ['_', 'y', 'g'];
         var string = '';
@@ -39,3 +50,17 @@ export default class Response {
         return this.response;
     }
 }
+
+Response.fromString = function(string) {
+    var response = new Response();
+    for (var i = 0; i < string.length; i++) {
+        var slot = string[i];
+        if (slot === 'y') {
+            response.setYellow(i);
+        } else if (slot === 'g') {
+            response.setGreen(i);
+        }
+    }
+    return response;
+
+};

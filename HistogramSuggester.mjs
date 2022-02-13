@@ -5,11 +5,18 @@ import HistogramComputer from "./HistogramComputer.mjs";
 
 
 export default class HistogramSuggester {
+    /**
+     * 
+     * @param {Array<Word>} words The array of candidates from which to derive a suggestion. 
+     */
     constructor(words) {
         this.words = words;
         this.histogramComputer_ = new HistogramComputer(words);
     }
 
+    /**
+     * @param {Word} guess The guess for which to get the most frequent response. 
+     */
     getMostFrequestResponse(guess) {
         var histogram = this.histogramComputer_.getResponsesHistogram(guess);
         var max = 0;
