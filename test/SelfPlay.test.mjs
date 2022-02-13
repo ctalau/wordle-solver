@@ -13,7 +13,9 @@ describe('SelfPlay', function() {
     it('guesses opera in two moves', () => {
         var selfPlay = new SelfPlay(candidates => new HistogramSuggester(candidates).getGuessWithBestMostFrequestResponse());
         assert.equal(selfPlay.playGame(wordFromString('opera')), 2);
-        // console.log(selfPlay.playAllGames());
     }); 
-
+    it('plays all games', () => {
+        var selfPlay = new SelfPlay(candidates => new HistogramSuggester(candidates).getGuessWithBestMostFrequestResponse());
+        console.log(selfPlay.playAllGames());
+    });
 });

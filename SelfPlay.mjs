@@ -50,6 +50,7 @@ export default class SelfPlay {
         for (var i = 0; i < count; i++) {
             var duration = this.playRandomGame();
             average += duration;
+            console.log(i, average / (i + 1));
         }
         return average / count;
     }
@@ -57,14 +58,16 @@ export default class SelfPlay {
     playAllGames() {
         var average = 0;
         var max = 0;
+        var fails = 0;
         for (var i = 0; i < WORDS.length; i++) {
             var duration = this.playGame(WORDS[i]);
             average += duration;
             if (duration > 6) {
+                fails ++;
                 console.log("!!! Game " + WORDS[i] + " took " + duration + " moves.");
             }
             max = Math.max(max, duration)
-            console.log(i, average / (i + 1), max);
+            console.log(i, average / (i + 1), 'fails: ' + fails, 'max:' + max);
         }
         return average / WORDS.length;
     }

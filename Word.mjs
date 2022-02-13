@@ -10,8 +10,7 @@ function letterCode(l) {
 
 export default class Word {
 
-    constructor(index) {
-        this.index = index;
+    constructor() {
     }
 
     setLetters(word) {
@@ -54,10 +53,6 @@ export default class Word {
         return -1;
     }
 
-    getIndex() {
-        return this.index;
-    }
-
     equals(otherWord) {
         return this.index === otherWord.index;
     }
@@ -71,7 +66,7 @@ export default class Word {
     }
 
     clone() {
-        var word = new Word(this.index);
+        var word = new Word();
         word.bits = this.bits;
         return word;
     }

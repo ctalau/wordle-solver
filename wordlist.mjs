@@ -5758,9 +5758,8 @@ export const WORDS = [
     'rumba',
     'biffy',
     'pupal',
-  ].map((w, index) => new Word(index).setLetters(w));
+  ].map((w) => new Word().setLetters(w));
 
   export function wordFromString(string) {
-    var index = WORDS.findIndex(word => word.toString() === string);
-    return new Word(index).setLetters(string);
+    return new Word().setLetters(string);
   }
