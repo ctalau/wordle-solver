@@ -1,4 +1,13 @@
 export default class UI {
+
+    getModeCheckbox() {
+        return document.getElementById('hard-mode');
+    }
+
+    isHardMode() {
+        return this.getModeCheckbox().checked;
+    }
+    
     getGuess(index) {
         return document.getElementById("guess-" + index).value;
     }
@@ -37,6 +46,9 @@ export default class UI {
     }
     
     onResponseAvailable(callback) {
-        document.getElementById('submit').onclick = callback;
+        document.getElementById('submit').onclick = () => {
+            this.getModeCheckbox().disabled = true;
+            callback();
+        };
     }
 }

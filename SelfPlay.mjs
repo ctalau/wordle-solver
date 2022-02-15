@@ -1,11 +1,11 @@
-import {WORDS, wordFromString} from './wordlist.mjs';
+import {WORDS, wordFromString, ANSWERS} from './wordlist.mjs';
 import Responder from './Responder.mjs';
 import ConstraintSet from './ConstraintSet.mjs';
 import PlayHistogram from './PlayHistogram.mjs';
 
 // This choice is computed by runing the algoritm. But since it is expensive to compute, 
 // it is just hardcoded here.
-var firstGuess = wordFromString('aloes');
+var firstGuess = wordFromString('lares');
 
 export default class SelfPlay {
 
@@ -16,6 +16,7 @@ export default class SelfPlay {
     getFirstGuess() {
         if (!firstGuess) {
             firstGuess = this.strategy(WORDS);
+            console.log("First guess: " + firstGuess);
         }
         return firstGuess;
     }
@@ -23,12 +24,20 @@ export default class SelfPlay {
     playGame(answer) {
         var history = [];
 
-        var candidates = WORDS;
+        var candidates = ANSWERS;
         var guess = this.getFirstGuess();
         var round = 1;
 
         while (true) {
             var response = new Responder().getResponse_(guess, answer);
+            if (response.toString() === 'ggggg') {
+                return round;
+            } else if (candidates.length === 1) {
+                var msg = "Wrong answer found: " +  candidates[0] + ". Was: " + answer + ". Response: " + response.toString();
+                console.log(msg);
+                throw new Error(msg);
+            }
+            
             history.push({guess, info: response});
             var constraintSet = ConstraintSet.fromGuesses(history);
             
@@ -36,12 +45,6 @@ export default class SelfPlay {
 
             if (candidates.length === 0) {
                 throw new Error("Lost game - no answer found. Was: " + answer);
-            } else if (candidates.length === 1) {
-                if (candidates[0].equals(answer)) {
-                    return round;
-                } else {
-                    throw new Error("Lost game - wrong answer. Got: " + candidates[0] + ", was: " + answer);
-                }
             }
             guess = this.strategy(candidates);
             round++;
@@ -49,7 +52,7 @@ export default class SelfPlay {
     }
 
     playRandomGame() {
-        return this.playGame(WORDS[Math.floor(Math.random() * WORDS.length)]);
+        return this.playGame(ANSWERS[Math.floor(Math.random() * ANSWERS.length)]);
     }
 
     estimateAverageGameLength(count) {
@@ -67,8 +70,8 @@ export default class SelfPlay {
      */
     playAllGames() {
         var playHistogram = new PlayHistogram();
-        for (var i = 0; i < WORDS.length; i++) {
-            var duration = this.playGame(WORDS[i]);
+        for (var i = 0; i < ANSWERS.length; i++) {
+            var duration = this.playGame(ANSWERS[i]);
             playHistogram.add(duration);
             if (i % 100 === 0) {
                 console.log(`Word: ${i},\t ` + playHistogram.toString());

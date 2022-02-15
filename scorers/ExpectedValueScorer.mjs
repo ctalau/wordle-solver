@@ -19,7 +19,7 @@ export default class ExpectedValueScorer {
     getScore(histogram) {
         var squaredSum = 0;
         var count = 0;
-        for (var size in Object.values(histogram)) {
+        for (var size of Object.values(histogram)) {
             squaredSum += size * size;
             count += size;
         }

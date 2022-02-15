@@ -1,9 +1,8 @@
 import ConstraintSet from "./ConstraintSet.mjs";
-import { WORDS, wordFromString } from "./wordlist.mjs";
+import { wordFromString, ANSWERS } from "./wordlist.mjs";
 import UI from "./UI.mjs";
 import HistogramSuggester from "./HistogramSuggester.mjs";
 import Response from "./Response.mjs";
-import MaxScorer from "./scorers/MaxScorer.mjs";
 import ExpectedValueScorer from "./scorers/ExpectedValueScorer.mjs";
 
 var ui = new UI();
@@ -14,14 +13,16 @@ ui.onResponseAvailable(() => {
     });
     var constraintSet =  ConstraintSet.fromGuesses(constraints);    
     
-    var candidates = WORDS.filter(word => constraintSet.matches(word));
+    var candidates = ANSWERS.filter(word => constraintSet.matches(word));
     if (candidates.length === 0) {
         alert('No matching words.');
     } else if (candidates.length === 1) {
         alert('Found answer: ' + candidates[0]);
     } else {
         var scorer = new ExpectedValueScorer();
-        var suggestion = new HistogramSuggester(candidates, scorer).getGuessWithBestScore();
+        const suggester = new HistogramSuggester(candidates, scorer);
+        suggester.setHardMode(ui.isHardMode());
+        var suggestion = suggester.getGuessWithBestScore();
         ui.setNextGuess(suggestion);
     }
 });
