@@ -7,10 +7,12 @@ import PlayHistogram from './PlayHistogram.mjs';
 // it is just hardcoded here.
 var firstGuess = wordFromString('lares');
 
+
 export default class SelfPlay {
 
     constructor(strategy) {
         this.strategy = strategy;
+        this.secondGuessCache = new Map();
     }
 
     getFirstGuess() {
@@ -36,9 +38,12 @@ export default class SelfPlay {
                 var msg = "Wrong answer found: " +  candidates[0] + ". Was: " + answer + ". Response: " + response.toString();
                 console.log(msg);
                 throw new Error(msg);
-            }
+            } 
             
             history.push({guess, info: response});
+            if (history.length === 6) {
+                console.log("Failed: " + history.map(({guess, info}) => `${guess.toString()} => ${info.toString()}`).join(','));
+            }
             var constraintSet = ConstraintSet.fromGuesses(history);
             
             candidates = candidates.filter(word => constraintSet.matches(word));
@@ -46,7 +51,15 @@ export default class SelfPlay {
             if (candidates.length === 0) {
                 throw new Error("Lost game - no answer found. Was: " + answer);
             }
-            guess = this.strategy(candidates);
+
+            if (history.length === 1) {
+                if (!this.secondGuessCache.has(response.toKey())) {
+                    this.secondGuessCache.set(response.toKey(), this.strategy(candidates));
+                }
+                guess = this.secondGuessCache.get(response.toKey());
+            } else {
+                guess = this.strategy(candidates);
+            }
             round++;
         }
     }
