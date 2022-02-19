@@ -37,10 +37,20 @@ describe('SelfPlay', function() {
             assert(histo.getAvg() < 3.631);
             assert(histo.getFails() <= 9);
         });
-        // Easy mode: Avg: 3.520138588133391,  fails: 0,       max: 5
+        it('plays easy mode with average of 3.52 and 0 fails', () => {
+            var scorer = new ExpectedValueScorer();
+            var selfPlay = new SelfPlay(candidates => {
+                var suggester = new HistogramSuggester(candidates, scorer);
+                return suggester.getGuessWithBestScore()
+            });
+            var histo = selfPlay.playAllGames();
+            assert(histo.getAvg() < 3.53);
+            assert.equal(histo.getFails(), 0);
+        });
     });
 
     describe('with MaxScorer', () => {
+        return; // Max Scorer is a bad scorer.
         it('plays hard mode with average of 3.71 and 11 fails', () => {
             var scorer = new MaxScorer();
             var selfPlay = new SelfPlay(candidates => {
@@ -52,5 +62,17 @@ describe('SelfPlay', function() {
             assert(histo.getAvg() < 3.71);
             assert(histo.getFails() <= 11);
         });
+        if (enableSlowTests) {
+            it('plays easy mode with average of 3.59 and 0 fails', () => {
+                var scorer = new MaxScorer();
+                var selfPlay = new SelfPlay(candidates => {
+                    var suggester = new HistogramSuggester(candidates, scorer);
+                    return suggester.getGuessWithBestScore()
+                });
+                var histo = selfPlay.playAllGames();
+                assert(histo.getAvg() < 3.59);
+                assert.equal(histo.getFails(), 0);
+            });
+        }
     });
 });
