@@ -30,6 +30,11 @@ export default class HistogramSuggester {
     }
 
     getGuessWithBestScore() {
+        if (this.words.length <= 2) {
+            // If only one word, pick that one.
+            // If two words, pick the first one since there are equal chances of win for each.
+            return this.words[0];
+        }
         var bestGuess = '';
         var bestScore = Infinity;    
         var possibleAnswers = new Set(this.words);
