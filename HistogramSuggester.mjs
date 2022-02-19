@@ -2,6 +2,7 @@ import { WORDS } from "./wordlist.mjs";
 import Word from "./Word.mjs";
 import Responder from "./Responder.mjs";
 import HistogramComputer from "./HistogramComputer.mjs";
+import ConstraintSet from "./ConstraintSet.mjs";
 
 
 export default class HistogramSuggester {
@@ -9,12 +10,14 @@ export default class HistogramSuggester {
      * 
      * @param {Array<Word>} words The array of candidates from which to derive a suggestion. 
      * @param {{getScore: function(Object<number, number>): number}} scorer The scorer to use to score the candidates.
+     * @param {Array<{guess: Word, info: Response}>} history The history of guesses.
      */
-    constructor(words, scorer) {
+    constructor(words, scorer, history) {
         this.words = words;
         this.histogramComputer_ = new HistogramComputer(words);
         this.scorer = scorer;
         this.hardMode = false;
+        this.history = history;
     }
 
     setHardMode(hardMode) {
@@ -38,7 +41,13 @@ export default class HistogramSuggester {
         var bestGuess = '';
         var bestScore = Infinity;    
         var possibleAnswers = new Set(this.words);
-        var candidates = this.hardMode ? this.words : WORDS;
+        var candidates;
+        if (this.hardMode) {
+            var constraintSet = ConstraintSet.fromGuesses(this.history);
+            candidates = WORDS.filter(word => constraintSet.matches(word));
+        } else {
+            candidates = WORDS;
+        }
         for (let guess of candidates) {
             var score = this.getScore(guess);
             if (score < bestScore || score === bestScore && possibleAnswers.has(guess)) {

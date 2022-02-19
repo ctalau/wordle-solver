@@ -54,11 +54,11 @@ export default class SelfPlay {
 
             if (history.length === 1) {
                 if (!this.secondGuessCache.has(response.toKey())) {
-                    this.secondGuessCache.set(response.toKey(), this.strategy(candidates));
+                    this.secondGuessCache.set(response.toKey(), this.strategy(candidates, history));
                 }
                 guess = this.secondGuessCache.get(response.toKey());
             } else {
-                guess = this.strategy(candidates);
+                guess = this.strategy(candidates, history);
             }
             round++;
         }
