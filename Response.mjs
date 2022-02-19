@@ -34,6 +34,16 @@ export default class Response {
         return this.getSlot(i) === YELLOW;
     }
 
+    getGreensCount() {
+        var count = 0;
+        for (var i = 0; i < 5; i++) {
+            if (this.isGreen(i)) {
+                count++;
+            }
+        }
+        return count;
+    }
+
     toString() {
         var mapping = ['_', 'y', 'g'];
         var string = '';
@@ -63,4 +73,10 @@ Response.fromString = function(string) {
     }
     return response;
 
+};
+
+Response.fromKey = function(key) {
+    var response = new Response();
+    response.response = key;
+    return response;
 };
